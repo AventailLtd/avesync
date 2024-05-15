@@ -32,6 +32,7 @@ A kliens induláshoz szükség van:
 
 ## Működés
 **Létrehozás:**
+- Fájlrendszer szkennelés közben kiderül, hogy a db-ben nem létezik, de a fájlrendszerben igen, ilyenkor létrehozza a fájl sort db-ben és beírja magát a replicas-ba.
 - A db szkennelés közben kiderül, hogy db-ben létezik a fájl, de a fájlrendszerben nem, akkor letölti valamelyik replicas-tól és beírja magát a replicas-ok közé.
   
 **Módosítás:**
