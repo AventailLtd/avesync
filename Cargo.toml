@@ -1,0 +1,10 @@
+[package]
+name = "avesync"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+diesel = { version = "2.1.6", features = ["postgres", "r2d2", "chrono"] }
+dotenvy = "0.15.7"
+serde = { version = "1.0.202", features = ["derive"] }
+chrono = "0.4.38"
