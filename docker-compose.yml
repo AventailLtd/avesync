@@ -1,0 +1,24 @@
+services:
+  rust:
+    build: "."
+    volumes:
+    - ./:/usr/src/app
+    ports:
+      - "3001:3001"
+    command: bash -c "cargo watch -x run"
+    depends_on:
+      - postgres
+
+  postgres:
+    image: aventailltd/postgresql-locale:15.2-bullseye
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DATABASE_DB}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    volumes:
+      - postgres:/var/lib/postgresql/data:rw
+    command: [ "postgres", "-c", "log_statement=all" ]
+
+volumes:
+  postgres:

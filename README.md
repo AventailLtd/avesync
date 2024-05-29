@@ -45,3 +45,22 @@ A kliens induláshoz szükség van:
 
 ## TODO:
 Konfliktusok, pl. mindkét kliensen ugyanazzal a fájlnévvel jön létre, akkor melyik az erősebb. Az újabb? Tartsuk meg mindkettőt _conflict suffix-el?
+
+## Dev
+
+### Start containers
+```
+cp .env.example .env
+
+docker-compose up
+```
+
+### Exec rust container
+```
+docker-compose exec -u 1000 rust bash
+```
+
+### Run migrations
+```
+diesel migration run
+```

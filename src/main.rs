@@ -1,31 +1,36 @@
-mod models {
-    pub mod file;
-    pub mod replica;
+pub mod models;
+pub mod schema;
+
+use std::env;
+use diesel::PgConnection;
+use dotenvy::dotenv;
+use models::file::File;
+use diesel::prelude::*;
+
+pub fn establish_connection() -> PgConnection {
+    dotenv().ok();
+
+    let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+    PgConnection::establish(&database_url)
+        .unwrap_or_else(|_| panic!("Error connecting to {}", database_url))
 }
 
-use models::file::File;
-use models::replica::Replica;
-
 fn main() {
-    let new_file = File {
-        id: 1,
-        filepath: "path/to/file".to_string(),
-        size: 100,
-        file_date: chrono::Utc::now().naive_utc(),
-        replicas: "replica1,replica2".to_string(),
-        to_delete: false,
-        updated_at: chrono::Utc::now().naive_utc(),
-    };
+    use self::schema::files::dsl::*;
 
-    let new_replica = Replica {
-        id: 1,
-        name: "replica1".to_string(),
-        ip: "192.168.1.1".to_string(),
-        port: 8080,
-        connected_at: chrono::Utc::now().naive_utc(),
-        is_online: true,
-    };
+    let connection = &mut establish_connection();
+    let results = files
+        .limit(5)
+        .select(File::as_select())
+        .load(connection)
+        .expect("Error loading files");
 
-    println!("File: {:?}", new_file);
-    println!("Replica: {:?}", new_replica);
+    println!("Displaying {} files", results.len());
+    for file in results {
+        println!("{}", file.id);
+        println!("{}", file.filepath);
+        println!("{}", file.size);
+        println!("{}", file.replicas);
+        println!("{}", file.updated_at);
+    }
 }

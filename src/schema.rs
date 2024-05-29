@@ -1,3 +1,5 @@
+// @generated automatically by Diesel CLI.
+
 diesel::table! {
     files (id) {
         id -> Int4,
@@ -20,3 +22,8 @@ diesel::table! {
         is_online -> Bool,
     }
 }
+
+diesel::allow_tables_to_appear_in_same_query!(
+    files,
+    replicas,
+);
